@@ -15,7 +15,7 @@ public interface ClientService {
 
     ClientDto updateClientByRequest(String id, ClientDto updateInfoClient);
 
-    String deleteClientByRequest(String id);
+    void deleteClientByRequest(String id);
 
     List<ClientDto> findClientsBySurname(String surname);
 }

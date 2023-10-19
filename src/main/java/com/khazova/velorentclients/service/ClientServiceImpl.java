@@ -2,7 +2,7 @@ package com.khazova.velorentclients.service;
 
 import com.khazova.velorentclients.exceptions.BusinessError;
 import com.khazova.velorentclients.exceptions.ServiceException;
-import com.khazova.velorentclients.mapper.Map;
+import com.khazova.velorentclients.mapper.ClientMapper;
 import com.khazova.velorentclients.model.Client;
 import com.khazova.velorentclients.model.ClientDto;
 import com.khazova.velorentclients.repo.ClientRepository;
@@ -18,18 +18,18 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository repository;
-    private final Map map;
+    private final ClientMapper clientMapper;
 
-    public ClientServiceImpl(ClientRepository repository, Map map) {
+    public ClientServiceImpl(ClientRepository repository, ClientMapper clientMapper) {
         this.repository = repository;
-        this.map = map;
+        this.clientMapper = clientMapper;
     }
 
     @Override
     @Transactional
     public ClientDto newClient(ClientDto clientByRequest) {
-        Client save = repository.save(map.mapToEntity(clientByRequest));
-        return map.entityToDto(save);
+        Client save = repository.save(clientMapper.mapToEntity(clientByRequest));
+        return clientMapper.entityToDto(save);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientDto> getAllClients(Pageable pageable) {
         Page<Client> clients = repository.findAll(pageable);
         return clients.stream()
-                .map(map::entityToDto)
+                .map(clientMapper::entityToDto)
                 .toList();
     }
 
@@ -49,30 +49,28 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     public ClientDto updateClientByRequest(String id, ClientDto updateInfoClient) {
         Client foundClient = repository.findById(id).orElseThrow(() -> new ServiceException(BusinessError.CLIENT_NOT_FOUND, id));
-        Client request = map.updateClientByRequest(updateInfoClient, foundClient);
+        Client request = clientMapper.updateClientByRequest(updateInfoClient, foundClient);
         repository.save(request);
-        return map.entityToDto(request);
+        return clientMapper.entityToDto(request);
     }
 
     @Override
     @Transactional
-    public String deleteClientByRequest(String id) {
-        String message = "Клиент c id:%s удален из базы";
+    public void deleteClientByRequest(String id) {
         Client foundClient = repository.findById(id).orElseThrow(() -> new ServiceException(BusinessError.CLIENT_NOT_FOUND, id));
         repository.deleteById(foundClient.getId());
-        return message.formatted(id);
     }
 
     @Override
     public List<ClientDto> findClientsBySurname(String surname) {
         List<Client> foundClients = repository.findAllByName(surname);
         return foundClients.stream()
-                .map(map::entityToDto)
+                .map(clientMapper::entityToDto)
                 .toList();
     }
 
     private ClientDto getClient(String id) {
         Client foundClient = repository.findById(id).orElseThrow(() -> new ServiceException(BusinessError.CLIENT_NOT_FOUND, id));
-        return map.entityToDto(foundClient);
+        return clientMapper.entityToDto(foundClient);
     }
 }

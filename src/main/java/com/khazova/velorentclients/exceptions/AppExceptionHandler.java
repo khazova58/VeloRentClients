@@ -9,16 +9,21 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @ControllerAdvice
 public class AppExceptionHandler {
+
+    private LocalDateTime now = LocalDateTime.now();
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<?> handleServiceException(ServiceException ex) {
         ApiError error = ApiError.builder()
                 .errorCode(ex.getBusinessError().getErrorCode())
                 .description(ex.getMessage())
-                .timeStamp(LocalDateTime.now())
+                .timeStamp(now.format(formatter))
                 .build();
         return new ResponseEntity<>(error, ex.getBusinessError().getHttpStatus());
     }
@@ -33,10 +38,9 @@ public class AppExceptionHandler {
         ApiError apiError = ApiError.builder()
                 .errorCode("Error:0100")
                 .description("Ошибка валидации")
-                .timeStamp(LocalDateTime.now())
+                .timeStamp(now.format(formatter))
                 .errors(messages)
                 .build();
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
-
 }

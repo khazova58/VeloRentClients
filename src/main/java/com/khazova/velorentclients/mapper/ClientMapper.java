@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
-public interface Map {
+public interface ClientMapper {
 
     Client mapToEntity(ClientDto clientByRequest);
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,6 +12,6 @@ import java.util.List;
 public class ApiError {
     private String errorCode;
     private String description;
-    private LocalDateTime timeStamp;
+    private String timeStamp;
     private List<String> errors;
 }

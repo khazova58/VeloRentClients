@@ -1,6 +1,6 @@
 package com.khazova.velorentclients.controller;
 
-import com.khazova.velorentclients.model.ClientDto;
+import com.khazova.velorentclients.model.dto.ClientDto;
 import com.khazova.velorentclients.service.ClientService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,8 +31,9 @@ class ClientControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final ClientDto dto = new ClientDto("Sokolova", "Svetlana", "Sergeevna", 36, "sveta@ya.ru", "89273661328", "Moscow");
-
+    private final ClientDto dto = new ClientDto("Sokolova", "Svetlana", "Sergeevna",
+            36, "sveta@ya.ru", "89273661328", "Moscow", 1,
+            "caffc451-2261-45df-ba69-3ac7a62120ba");
 
     @Test
     @DisplayName("Создание нового клиента")
@@ -43,18 +44,19 @@ class ClientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content("""
                                 {
-                                  "surname": "Sokolova",
-                                  "name": "Svetlana",
-                                  "lastname": "Sergeevna",
+                                  "lastName": "Sokolova",
+                                  "firstName": "Svetlana",
+                                  "middleName": "Sergeevna",
                                   "age": 36,
                                   "email": "sveta@ya.ru",
                                   "phoneNumber": "89273661328",
-                                  "address": "Moscow"
+                                  "address": "Moscow",
+                                  "source": 1
                                 }
                                 """))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.surname").value(dto.getSurname()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(dto.getLastName()));
     }
 
     @Test
@@ -66,7 +68,7 @@ class ClientControllerTest {
                         .param("id", "testId"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.surname").value(dto.getSurname()));
+                .andExpect(jsonPath("$.lastName").value(dto.getLastName()));
     }
 
     @Test
@@ -74,7 +76,9 @@ class ClientControllerTest {
     void getAllClients() throws Exception {
         Mockito.when(service.getAllClients(any())).thenReturn(List.of(dto));
 
-        String expected = "[{\"surname\":\"Sokolova\",\"name\":\"Svetlana\",\"lastname\":\"Sergeevna\",\"age\":36,\"email\":\"sveta@ya.ru\",\"phoneNumber\":\"89273661328\",\"address\":\"Moscow\"}]";
+        String expected = "[{\"lastName\":\"Sokolova\",\"firstName\":\"Svetlana\",\"middleName\":\"Sergeevna\"," +
+                "\"age\":36,\"email\":\"sveta@ya.ru\",\"phoneNumber\":\"89273661328\",\"address\":\"Moscow\"," +
+                "\"source\":1,\"referrer\":\"caffc451-2261-45df-ba69-3ac7a62120ba\"}]";
 
         MvcResult result = mockMvc.perform(get("http://localhost:8081/api/v1/client/all"))
                 .andDo(print())
@@ -86,12 +90,15 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Получить клиентов по фамилии")
-    void getClientsBySurname() throws Exception {
-        Mockito.when(service.findClientsBySurname("Sokolova")).thenReturn(List.of(dto));
-        String expected = "[{\"surname\":\"Sokolova\",\"name\":\"Svetlana\",\"lastname\":\"Sergeevna\",\"age\":36,\"email\":\"sveta@ya.ru\",\"phoneNumber\":\"89273661328\",\"address\":\"Moscow\"}]";
+    void getClientsByLastName() throws Exception {
+        Mockito.when(service.findClientsByLastName("Sokolova")).thenReturn(List.of(dto));
+
+        String expected = "[{\"lastName\":\"Sokolova\",\"firstName\":\"Svetlana\",\"middleName\":\"Sergeevna\"," +
+                "\"age\":36,\"email\":\"sveta@ya.ru\",\"phoneNumber\":\"89273661328\",\"address\":\"Moscow\"," +
+                "\"source\":1,\"referrer\":\"caffc451-2261-45df-ba69-3ac7a62120ba\"}]";
 
         MvcResult result = mockMvc.perform(get("http://localhost:8081/api/v1/client/byName")
-                        .param("surname", "Sokolova"))
+                        .param("lastName", "Sokolova"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -108,19 +115,21 @@ class ClientControllerTest {
                         .param("id", "testId")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content("""
-                                {
-                                  "surname": "Sokolova",
-                                  "name": "Svetlana",
-                                  "lastname": "Sergeevna",
+                                 {
+                                  "lastName": "Sokolova",
+                                  "firstName": "Svetlana",
+                                  "middleName": "Sergeevna",
                                   "age": 36,
                                   "email": "sveta@ya.ru",
                                   "phoneNumber": "89273661328",
-                                  "address": "Moscow"
+                                  "address": "Moscow",
+                                  "source": 1,
+                                  "referrer": "caffc451-2261-45df-ba69-3ac7a62120ba"
                                 }
                                 """))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("surname").value("Sokolova"));
+                .andExpect(jsonPath("lastName").value("Sokolova"));
     }
 
     @Test

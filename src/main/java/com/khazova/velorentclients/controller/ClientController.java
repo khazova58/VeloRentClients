@@ -1,6 +1,6 @@
 package com.khazova.velorentclients.controller;
 
-import com.khazova.velorentclients.model.ClientDto;
+import com.khazova.velorentclients.model.dto.ClientDto;
 import com.khazova.velorentclients.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +32,7 @@ public class ClientController {
      * @return созданный клиент
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Новый клиент")
     public ClientDto newClient(@Valid @RequestBody ClientDto clientByRequest) {
         return service.newClient(clientByRequest);
@@ -57,20 +58,20 @@ public class ClientController {
      */
     @GetMapping("/all")
     @Operation(summary = "Получить всех клиентов")
-    public List<ClientDto> getAllClients(@ParameterObject @PageableDefault(sort = "surname", direction = Sort.Direction.ASC) Pageable pageable) {
+    public List<ClientDto> getAllClients(@ParameterObject @PageableDefault(sort = "lastName", direction = Sort.Direction.ASC) Pageable pageable) {
         return service.getAllClients(pageable);
     }
 
     /**
      * Получить клиента по фамилии
      *
-     * @param surname фамилия клиента
+     * @param lastName фамилия клиента
      * @return найденый клиент или сообщение об ошибке в случае отсутствия в базе
      */
     @GetMapping("/byName")
     @Operation(summary = "Получить клиентов по фамилии")
-    public List<ClientDto> getClientsBySurname(@RequestParam String surname) {
-        return service.findClientsBySurname(surname);
+    public List<ClientDto> getClientsByLastName(@RequestParam String lastName) {
+        return service.findClientsByLastName(lastName);
     }
 
     /**

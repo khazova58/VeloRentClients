@@ -1,0 +1,15 @@
+databaseChangeLog:
+# Связанные таблицы: Источник, Статус, Уровень интереса, Группы
+  - include:
+      file: db/changelog/tables/create-table-source.sql
+  - include:
+      file: db/changelog/tables/create-table-status.sql
+  - include:
+      file: db/changelog/tables/create-table-level-interest.sql
+  - include:
+      file: db/changelog/tables/create-table-groups.sql
+# Основная таблица Клиенты
+  - include:
+      file: db/changelog/tables/create-table-clients.sql
+  - include:
+      file: db/changelog/tables/create-table-client-groups.sql

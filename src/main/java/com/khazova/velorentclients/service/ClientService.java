@@ -1,6 +1,6 @@
 package com.khazova.velorentclients.service;
 
-import com.khazova.velorentclients.model.ClientDto;
+import com.khazova.velorentclients.model.dto.ClientDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public interface ClientService {
 
     void deleteClientByRequest(String id);
 
-    List<ClientDto> findClientsBySurname(String surname);
+    List<ClientDto> findClientsByLastName(String surname);
 }

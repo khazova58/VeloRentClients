@@ -13,6 +13,7 @@ public class ServiceException extends RuntimeException {
     }
 
     public ServiceException(BusinessError businessError) {
+        super(businessError.getDescription());
         this.businessError = businessError;
     }
 }

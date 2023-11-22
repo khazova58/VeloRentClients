@@ -1,28 +1,38 @@
 package com.khazova.velorentclients.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+
+/**
+ * Сущность Клиент
+ */
 
 @Entity
-@Table(name = "client")
-@Data
+@Table(name = "clients", schema = "rental")
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Client {
+
     @Id
-    @Column(name = "id")
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "last_name")
+    private String lastName;//фамилия
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;//имя
 
-    @Column(name = "lastname")
-    private String lastname;
+    @Column(name = "middle_name")
+    private String middleName;//отчество
 
     @Column(name = "age")
     private int age;
@@ -30,16 +40,48 @@ public class Client {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phonenumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    public Client(String surname, String name, String lastname, int age, String email, String phoneNumber) {
-        this.surname = surname;
-        this.name = name;
-        this.lastname = lastname;
-        this.age = age;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "create_date")
+    @CreationTimestamp
+    private LocalDateTime createDate;
+
+    @Column(name = "last_access")
+    @UpdateTimestamp
+    private LocalDateTime lastAccess;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "source_id")
+    private Source source;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id")
+    private Status status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_id")
+    private LevelInterest levelInterest;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "referrer")
+    private Client referrer;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", createDate=" + createDate +
+                ", lastAccess=" + lastAccess +
+                '}';
     }
 }
-

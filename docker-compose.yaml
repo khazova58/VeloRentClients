@@ -7,8 +7,8 @@ services:
     image: 'postgres:15'
     container_name: 'bicycles-postgres'
     environment:
-      - 'POSTGRES_USER=admin'
-      - 'POSTGRES_PASSWORD=root'  #TODO подумать о защите данных
-      - 'POSTGRES_DB=bicycles'
+      - 'POSTGRES_USER=${POSTGRES_USER}'
+      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+      - 'POSTGRES_DB=${POSTGRES_DB}'
     ports:
       - '5432:5432'

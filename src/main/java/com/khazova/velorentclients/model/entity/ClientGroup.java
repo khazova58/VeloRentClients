@@ -1,4 +1,4 @@
-package com.khazova.velorentclients.model;
+package com.khazova.velorentclients.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

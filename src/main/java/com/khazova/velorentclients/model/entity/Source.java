@@ -1,9 +1,7 @@
-package com.khazova.velorentclients.model;
+package com.khazova.velorentclients.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Source {
 
     @Id
@@ -23,8 +22,8 @@ public class Source {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", length = 100)
-    private String name;
+    @Column(name = "title", length = 100)
+    private String title;
 
     @Column(name = "description", length = 1000)
     private String description;
@@ -36,7 +35,7 @@ public class Source {
     public String toString() {
         return "Source{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

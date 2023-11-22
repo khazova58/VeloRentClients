@@ -1,6 +1,6 @@
 package com.khazova.velorentclients.mapper;
 
-import com.khazova.velorentclients.model.Client;
+import com.khazova.velorentclients.model.entity.Client;
 import com.khazova.velorentclients.model.dto.ClientDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

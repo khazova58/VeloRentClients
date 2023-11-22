@@ -3,8 +3,8 @@ package com.khazova.velorentclients.service;
 import com.khazova.velorentclients.exceptions.BusinessError;
 import com.khazova.velorentclients.exceptions.ServiceException;
 import com.khazova.velorentclients.mapper.ClientMapper;
-import com.khazova.velorentclients.model.Client;
-import com.khazova.velorentclients.model.Source;
+import com.khazova.velorentclients.model.entity.Client;
+import com.khazova.velorentclients.model.entity.Source;
 import com.khazova.velorentclients.model.dto.ClientDto;
 import com.khazova.velorentclients.repo.ClientRepository;
 import com.khazova.velorentclients.repo.SourceRepository;
@@ -35,14 +35,11 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public ClientDto newClient(ClientDto clientByRequest) {
-        Optional byEmail = repository.findByEmail(clientByRequest.getEmail());
+        Optional<Client> byEmail = repository.findByEmail(clientByRequest.getEmail());
         if (byEmail.isPresent()) throw new ServiceException(BusinessError.EMAIL_IS_PRESENT, clientByRequest.getEmail());
 
         Source sourceByRequest = sourceRepository.findById(clientByRequest.getSource())
                 .orElseThrow(() -> new ServiceException(BusinessError.SOURCE_NOT_FOUND));
-
-        Client referrerByRequest = repository.findById(clientByRequest.getReferrer())
-                .orElseThrow(() -> new ServiceException(BusinessError.CLIENT_NOT_FOUND, clientByRequest.getReferrer()));
 
         Client newClient = Client.builder()
                 .lastName(clientByRequest.getLastName())
@@ -53,7 +50,7 @@ public class ClientServiceImpl implements ClientService {
                 .phoneNumber(clientByRequest.getPhoneNumber())
                 .email(clientByRequest.getEmail())
                 .source(sourceByRequest)
-                .referrer(referrerByRequest)
+                .referrer(getReferrer(clientByRequest))
                 .build();
 
         Client save = repository.save(newClient);
@@ -101,5 +98,14 @@ public class ClientServiceImpl implements ClientService {
     private ClientDto getClient(String id) {
         Client foundClient = repository.findById(id).orElseThrow(() -> new ServiceException(BusinessError.CLIENT_NOT_FOUND, id));
         return clientMapper.entityToDto(foundClient);
+    }
+
+    private Client getReferrer(ClientDto clientByRequest) {
+        if (clientByRequest.getReferrer() == null || clientByRequest.getReferrer().isEmpty()) {
+            return null;
+        } else {
+            return repository.findById(clientByRequest.getReferrer())
+                    .orElseThrow(() -> new ServiceException(BusinessError.CLIENT_NOT_FOUND, clientByRequest.getReferrer()));
+        }
     }
 }

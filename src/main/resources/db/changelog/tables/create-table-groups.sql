@@ -4,7 +4,7 @@
 create table if not exists rental.groups
 (
     id          integer primary key,
-    "name"      varchar(100) not null unique,
+    title       varchar(100) not null unique,
     description varchar(1000),
     create_date timestamp,
     update_date timestamp

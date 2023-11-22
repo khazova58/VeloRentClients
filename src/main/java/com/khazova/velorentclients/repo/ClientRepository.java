@@ -1,6 +1,6 @@
 package com.khazova.velorentclients.repo;
 
-import com.khazova.velorentclients.model.Client;
+import com.khazova.velorentclients.model.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,5 +18,5 @@ public interface ClientRepository extends JpaRepository<Client, String> {
             """)
     List<Client> findAllByName(@Param("lastName") String lastName);
 
-    Optional findByEmail(String email);
+    Optional<Client> findByEmail(String email);
 }

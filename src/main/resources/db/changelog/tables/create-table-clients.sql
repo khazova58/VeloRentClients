@@ -16,5 +16,5 @@ create table if not exists rental.clients
     source_id    integer references rental.source (id),
     status_id    integer references rental.status (id),
     level_id     integer references rental.level_interest (id),
-    referrer     varchar references rental.clients (user_id)
+    referrer_id  varchar references rental.clients (user_id)
 )

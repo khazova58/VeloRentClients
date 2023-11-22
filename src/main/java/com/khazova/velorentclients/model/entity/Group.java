@@ -1,4 +1,4 @@
-package com.khazova.velorentclients.model;
+package com.khazova.velorentclients.model.entity;
 
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -15,8 +15,8 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "description")
     private String description;

@@ -90,7 +90,7 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Получить клиентов по фамилии")
-    void getClientsBySurname() throws Exception {
+    void getClientsByLastName() throws Exception {
         Mockito.when(service.findClientsByLastName("Sokolova")).thenReturn(List.of(dto));
 
         String expected = "[{\"lastName\":\"Sokolova\",\"firstName\":\"Svetlana\",\"middleName\":\"Sergeevna\"," +
